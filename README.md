@@ -1,7 +1,11 @@
 # kanbankasi
 
-Design Patterns(Singleton,Adapter,Mediator) with flask framework
+Flask - Design Patterns(Singleton,Adapter,Mediator) 
 
-# web: email admin@admin.com pass: admin
+[ApiMediator.py](https://github.com/mzuvin/Flask-Design-Patterns/blob/master/kanbankasi/ApiMediator.py)
+
+# web: 
+
+> email admin@admin.com pass: admin
 
 https://kanbankasi.herokuapp.com/login

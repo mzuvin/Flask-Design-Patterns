@@ -1,0 +1,103 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+<!--
+{%for post in posts%}
+	<h1>{{post.title}}</h1>
+	<p>{{post.content}}</p>
+	by <b>{{post.auther}}</b>
+	<br>
+{% endfor %}
+-->
+
+
+
+<div class="card text-center border-danger">
+<div class="card-header border-success">
+   Stok Durumu
+  </div>
+  <div class="card-body">
+
+    	<div class="kan" >
+	
+		<div id="kan0" data-fill="data:ldbar/res,bubble(#248,#fff,40,1)" data-type="fill"
+		data-img="{{ url_for('static', filename='kan2.png') }}" data-img-size="100,100"> 
+		</div>
+
+		<div id="kan1" data-fill="data:ldbar/res,bubble(#248,#fff,40,1)" data-type="fill"
+		data-img="{{ url_for('static', filename='kan2.png') }}" data-img-size="100,100">
+		</div>
+		<div id="kan2" data-fill="data:ldbar/res,bubble(#248,#fff,40,1)" data-type="fill"
+		data-img="{{ url_for('static', filename='kan2.png') }}" data-img-size="100,100">
+		</div>
+		<div id="kan3" data-fill="data:ldbar/res,bubble(#248,#fff,40,1)" data-type="fill"
+		data-img="{{ url_for('static', filename='kan2.png') }}" data-img-size="100,100">
+		</div>
+		<div id="kan4" data-fill="data:ldbar/res,bubble(#248,#fff,40,1)" data-type="fill"
+		data-img="{{ url_for('static', filename='kan2.png') }}" data-img-size="100,100">
+		</div>
+		<div id="kan5" data-fill="data:ldbar/res,bubble(#248,#fff,40,1)" data-type="fill"
+		data-img="{{ url_for('static', filename='kan2.png') }}" data-img-size="100,100">
+		</div>
+		<div id="kan6" data-fill="data:ldbar/res,bubble(#248,#fff,40,1)" data-type="fill"
+		data-img="{{ url_for('static', filename='kan2.png') }}" data-img-size="100,100">
+		</div>
+		<div id="kan7" data-fill="data:ldbar/res,bubble(#248,#fff,40,1)" data-type="fill"
+		data-img="{{ url_for('static', filename='kan2.png') }}" data-img-size="100,100">
+		</div>
+	</div>
+  </div>
+  	<div class="kanradio card-body">
+		<input id="kan" type="radio" name="kan" value="1"> A+
+		<input id="kan" type="radio" name="kan" value="2"> A-
+		<input id="kan" type="radio" name="kan" value="3"> B+
+		<input id="kan" type="radio" name="kan" value="4"> B-
+		<input id="kan" type="radio" name="kan" value="5"> AB+
+		<input id="kan" type="radio" name="kan" value="6"> AB-
+		<input id="kan" type="radio" name="kan" value="7"> 0+
+		<input id="kan" type="radio" name="kan" value="8"> 0-
+	</div>
+	
+</div>
+
+<script>
+
+ $(function() {
+ 	
+ 	function gir(adet,index) {
+ 		var bar1 = new ldBar("#kan"+index);
+  		var bar2 = document.getElementById('kan'+index).ldBar;
+  		bar1.set(parseInt(adet));
+ 	}
+
+ 	function update(data) {
+ 		for (var i = 0; i < data.length; i++) {
+    	gir(data[i].tane,i);
+    	var text=data[i].tane+" "+data[i].tip+""+data[i].rh;
+    	console.log(text);
+    	var div='<div class="label">'+text+'</div>'
+   		$('#kan'+i).append(div);
+ 		}
+ 	}
+ 	$.ajax({
+    type: "post",
+    url: "/stok/json",
+    contentType: "json",
+    success: function(responseData, textStatus, jqXHR) {
+    	//alert('create')
+	    var data=JSON.parse(responseData); 
+	    update(data);
+    },
+    error: function(jqXHR, textStatus, errorThrown) {
+        console.log(errorThrown);
+    }})
+  
+ });
+ 
+ 
+
+</script>
+
+
+{% endblock content %}

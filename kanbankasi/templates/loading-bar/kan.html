@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Kan Gösterimi</title>
+	<link rel="stylesheet" type="text/css" href="loading-bar.css"/>
+	<script type="text/javascript" src="loading-bar.js"></script>
+	<style type="text/css">
+	.kan>*{
+		float: left;
+		margin-left: -30px;
+		
+	}
+	.ldBar-label {
+    margin-left: 43px;
+	}
+
+	.aldBar-label {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -webkit-transform: translate(-50%,-50%);
+    transform: translate(-50%,-50%);
+    text-shadow: 0 0 3px #fff;
+	}
+
+	</style>
+</head>
+<body>
+<div class="ldBar" data-value="50"></div>
+<br>
+<div id="myItem1" data-fill="data:ldbar/res,bubble(#248,#fff,50,1)" data-type="fill" data-path="M90.5,23.2c0-12.5-10.2-22.7-22.7-22.7
+	    c-13.6,0-20.9,8.6-22.3,13.8C44.3,8.9,
+	    35.1,0.5,23.2,0.5C10.7,0.5,0.5,10.7,
+	    0.5,23.2c0,22.2,36.5,45.3,45,55.9
+	    C53.5,67.3,90.5,46.3,90.5,23.2z">
+	</div>
+<br>
+<div class="kan" >
+	
+	<div id="kan1" data-fill="data:ldbar/res,bubble(#248,#fff,40,1)" data-type="fill"
+	data-img="kan2.png" data-img-size="100,100"> 
+	</div>
+	<div id="kan2" data-fill="data:ldbar/res,bubble(#248,#fff,40,1)" data-type="fill"
+	data-img="kan2.png" data-img-size="100,100">
+	</div>
+	<div id="kan3" data-fill="data:ldbar/res,bubble(#248,#fff,40,1)" data-type="fill"
+	data-img="kan2.png" data-img-size="100,100">
+	</div>
+	<div id="kan4" data-fill="data:ldbar/res,bubble(#248,#fff,40,1)" data-type="fill"
+	data-img="kan2.png" data-img-size="100,100">
+	</div>
+	<div id="kan5" data-fill="data:ldbar/res,bubble(#248,#fff,40,1)" data-type="fill"
+	data-img="kan2.png" data-img-size="100,100">
+	</div>
+	<div id="kan6" data-fill="data:ldbar/res,bubble(#248,#fff,40,1)" data-type="fill"
+	data-img="kan2.png" data-img-size="100,100">
+	</div>
+	<div id="kan7" data-fill="data:ldbar/res,bubble(#248,#fff,40,1)" data-type="fill"
+	data-img="kan2.png" data-img-size="100,100">
+	</div>
+	<div id="kan8" data-fill="data:ldbar/res,bubble(#248,#fff,40,1)" data-type="fill"
+	data-img="kan2.png" data-img-size="100,100">
+	</div>
+</div>
+
+
+
+
+<script>
+window.onload = function(e){ 
+for (var i = 1; i < 8; i++) {
+	kantipleri=['','A+','A-','B+','B-','AB+','AB-','0+','0-'];
+	var bar1 = new ldBar("#kan"+i);
+  	var bar2 = document.getElementById('kan'+i).ldBar;
+  	bar1.set((i*100/10));
+  	document.getElementsByClassName('ldBar-label')[i].innerText+=kantipleri[i]
+}
+  var bar1 = new ldBar("#myItem1");
+  var bar2 = document.getElementById('myItem1').ldBar;
+  bar1.set(60);
+ }
+</script>
+</body>
+</html>

@@ -1,0 +1,205 @@
+{% extends "layout.html" %}
+
+
+
+{% block content %}
+
+
+
+<div class="card text-center border-danger">
+<div class="card-header border-success">
+   Hasta Kan Ver
+  </div>
+  <div class="card-body">
+<table id="table" 
+	data-url="/hastakan/json"
+	data-toggle="table"
+	data-pagination="true"
+	data-search="true"
+	data-pagination-loop="false"
+	data-click-to-select="true"
+	data-checkbox-header="false"
+	data-side-pagination="server"
+	data-single-select="true" >
+<thead>
+<tr>
+<!--select p_name,p_surname,p_gender,p_address,p_email,h_id,kan_grubu,p_tc,p_phone -->
+ 	<th data-field="state" data-checkbox="true"></th>
+    <th data-field="isim">İsim</th>
+    <th data-field="soyisim">Soyad</th>
+   	<th data-field="tc">Tc</th>
+    <th data-field="kanid">kan</th>
+</tr>
+</thead>
+</table>
+</div>
+</div>
+
+<!-- Silme Emin Misin Modal 
+
+		    	data-toggle="table"
+		      	data-pagination="true"
+  				data-search="true"
+		      	data-pagination-loop="false"
+		       	data-click-to-select="true"
+		       	data-checkbox-header="false"
+		       	data-side-pagination="server" 
+
+
+
+-->
+<div class="modal fade" id="kanekle" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Hastaya Kan Ver</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        	Stoktan Kan seç
+        	<br>
+        	<table id="stable"
+        	data-pagination="true"
+			data-pagination-loop="false"
+			data-click-to-select="true"
+			data-checkbox-header="false"
+			data-side-pagination="server"
+			data-single-select="true">
+			  <thead>
+			    <tr>
+			    <th data-field="state" data-checkbox="true"></th>
+			    <th data-field="tarih">Tarih</th>
+			      <th data-field="id">ID</th>
+			      <th data-field="adet">Miktar</th>
+			    </tr>
+			  </thead>
+			</table>
+			<br />
+			<div class="row">
+			 <div class="col-lg-4">
+            <div class="input-group">
+        <span class="input-group-btn">
+            <button type="button" class="quantity-left-minus btn btn-danger btn-number"  data-type="minus" data-field="">
+              -
+            </button>
+        </span>
+        <input type="text" id="quantity" name="quantity" class="form-control input-number" value="1" min="1">
+        <span class="input-group-btn">
+            <button type="button" class="quantity-right-plus btn btn-success btn-number" data-type="plus" data-field="">
+                +
+            </button>
+        </span>
+    </div>
+        </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
+        <button id='modalkanverbtn' type="button" class="btn btn-primary">Ver</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script>
+
+ $(function() {
+ 	
+ 	var quantitiy=0;
+   $('.quantity-right-plus').click(function(e){
+        
+        // Stop acting like a button
+        e.preventDefault();
+        // Get the field name
+        var quantity = parseInt($('#quantity').val());
+        
+        // If is not undefined
+            
+            $('#quantity').val(quantity + 1);
+
+          
+            // Increment
+        
+    });
+
+     $('.quantity-left-minus').click(function(e){
+        // Stop acting like a button
+        e.preventDefault();
+        // Get the field name
+        var quantity = parseInt($('#quantity').val());
+        
+        // If is not undefined
+      
+            // Increment
+            if(quantity>0){
+            $('#quantity').val(quantity - 1);
+            }
+    });
+
+
+ 	
+ 	function stokkan(tc,kid,adet,sid) {
+	 	$.ajax({
+	    type: "post",
+	    url: "/stokkan/json?tc="+tc+"&kid="+kid+"&adet="+adet+"&stokid="+sid,
+	    contentType: "json",
+	    success: function(responseData, textStatus, jqXHR) {
+	    	alert('create');
+		    var data=JSON.parse(responseData); 
+		    console.log("stokkan");
+		   	console.log(data);
+		   	//[{"id": 14, "adet": 3}, {"id": 11, "adet": 1}]
+		   	var $stable = $('#stable')
+		   	//$table.bootstrapTable('refresh');
+ 			$stable.bootstrapTable({data: data})
+
+	    },
+	    error: function(jqXHR, textStatus, errorThrown) {
+	        console.log(errorThrown);
+	    }})
+ 	}
+
+ 	
+
+ 	 
+ 	//console.log(data);
+
+ 	$( "#ekle" ).click(function() {
+
+ 		var $table = $('#table');
+ 		
+ 		var json=JSON.parse(JSON.stringify($table.bootstrapTable('getSelections')));
+ 		secilentc=json[0].tc;
+ 		secilenkanid=json[0].kanid;
+ 		stokkan(json[0].tc,json[0].kanid,0);
+ 	});
+ 	$( "#modalkanverbtn" ).click(function() {
+ 		var $table = $('#stable');
+ 		var json=JSON.parse(JSON.stringify($table.bootstrapTable('getSelections')));
+ 		var quantity = parseInt($('#quantity').val());
+ 		stokkan(secilentc,secilenkanid,quantity,json[0]['id']);
+ 	});
+ 	
+ 	
+    
+   
+ });
+ 
+ 
+
+</script>
+
+
+{% endblock content %}
+
+{% block rightmenu %}
+
+<div class="nav text-right">
+	<button id="ekle" type="button" class="btn btn-primary" data-toggle="modal" data-target="#kanekle">Ekle</button>
+
+
+	
+{% endblock rightmenu %}

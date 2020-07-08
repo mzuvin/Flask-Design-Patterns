@@ -1,0 +1,657 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+<h1>Donor</h1>
+
+<button id='ekle' type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal1">Ekle</button>
+<button  data-toggle="modal" data-target="#exampleModal" id="buttonedit" class="btn btn-secondary">Düzenle</button>
+<button  data-toggle="modal" data-target="#silmodal" id="buttonsil" class="btn btn-danger">Sil</button>
+<!--data-side-pagination="server" 
+-->
+    <table id="table" 
+	data-url="/donor/json?a=list"
+    	data-toggle="table"
+	data-pagination="true"
+	data-search="true"
+	data-pagination-loop="false"
+	data-click-to-select="true"
+	data-checkbox-header="false"
+	data-side-pagination="server"
+	data-single-select="true" >
+    <thead>
+    <tr>
+    <!--select d_name,d_surname,d_gender,d_address,d_email,h_id,kan_grubu,d_tc,d_phone from donor' -->
+     	<th data-field="state" data-checkbox="true"></th>
+        <th data-field="d_name">İsim</th>
+        <th data-field="d_surname">Soyad</th>
+       	<th data-field="d_gender">Cinsiyet</th>
+        <th data-field="d_phone">Tel</th>
+        <th data-field="kan_grubu">Kan</th>
+    </tr>
+    </thead>
+</table>
+
+
+
+
+<!-- Silme Emin Misin Modal -->
+<div class="modal fade" id="silmodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        	Silmek istediğinize Emin Misiniz?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
+        <button id='silButton' type="button" class="btn btn-primary">Sil</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+<!-- Ekleme ve Güncelleme Modalları -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Düzenle</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+    <ul class="nav nav-tabs" id="myTab" role="tablist">
+  		<li class="nav-item">
+    		<a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Donor</a>
+  		</li>
+	  <li class="nav-item">
+	    <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Yakını</a>
+	  </li>
+	</ul>
+
+	<div class="tab-content" id="myTabContent">
+  		<div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+	  		<div class="modal-body">
+	        <form id='editform'>
+	        <div class="row">
+		        <div class="col-md-6">
+			      	<div class="form-group">
+			            <label for="recipient-name" class="col-form-label">isim</label>
+			            <input type="text" class="form-control" id="isim">
+			        </div>
+				</div>
+				<div class="col-md-6 ml-auto">
+		            <label for="recipient-name" class="col-form-label">Soyisim</label>
+		            <input type="text" class="form-control" id="soyisim">
+		        </div>
+	      	</div>
+	      	 <div class="row">
+		        <div class="col-md-6">
+			      	<div class="form-group">
+			            <label for="recipient-name" class="col-form-label">Telefon</label>
+			            <input type="text" class="form-control" id="tel">
+			        </div>
+				</div>
+				<div class="col-md-6 ml-auto">
+		            <label for="recipient-name" class="col-form-label">Adres</label>
+		            <input type="text" class="form-control" id="adres">
+		        </div>
+	      	</div>
+	      	<div class="row">
+		        <div class="col-md-6">
+			      	<div class="form-group">
+			            <label for="recipient-name" class="col-form-label">tc</label>
+			            <input type="text" class="form-control" id="tc">
+			        </div>
+				</div>
+				<div class="col-md-6 ml-auto">
+		           <div class="form-group">
+		            <label for="recipient-name" class="col-form-label">Kan Grubu</label>
+		            <br>
+		            <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">Aç</button>
+		            </div>
+		        </div>
+	      	</div>
+	      	<div class="row">
+		        <div class="col-md-6">
+			      	<div class="form-group">
+			            <label for="recipient-name" class="col-form-label">hastane</label>
+			            <input type="text" class="form-control" id="hastane">
+			        </div>
+				</div>
+				<div class="col-md-6 ml-auto">
+		            <label for="recipient-name" class="col-form-label">Email</label>
+		            <input type="text" class="form-control" id="email">
+		        </div>
+	      	</div>
+	      	 <div class="form-group">
+				<input id='erkek' type="radio" name="gender" value="e"/> erkek
+				<input id='kadin' type="radio" name="gender" value="k"/> kadin
+	         </div>
+	          <div class="form-group">
+	            <div class="collapse" id="collapseExample">
+		  				
+		  				<!--kantipleri=['','A+','A-','B+','B-','AB+','AB-','0+','0-'] -->
+		    				<input id="kan" type="radio" name="kan" value="1"> A+
+							<input id="kan" type="radio" name="kan" value="2"> A-
+							<input id="kan" type="radio" name="kan" value="3"> B+
+							<input id="kan" type="radio" name="kan" value="4"> B-
+							<input id="kan" type="radio" name="kan" value="5"> AB+
+							<input id="kan" type="radio" name="kan" value="6"> AB-
+							<input id="kan" type="radio" name="kan" value="7"> 0+
+							<input id="kan" type="radio" name="kan" value="8"> 0-
+
+
+		  			
+					</div>
+	          </div>
+	        </form>
+	      </div>
+		</div>
+
+	  	<div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+			<label for="recipient-name" class="col-form-label">Donor YAKINI</label>
+			<div class="modal-body">
+	        <form id='yakinformd'>
+	        <div class="row">
+		        <div class="col-md-6">
+			      	<div class="form-group">
+			            <label for="recipient-name" class="col-form-label">isim</label>
+			            <input type="text" class="form-control" id="yisim">
+			        </div>
+				</div>
+				<div class="col-md-6 ml-auto">
+		            <label for="recipient-name" class="col-form-label">Soyisim</label>
+		            <input type="text" class="form-control" id="ysoyisim">
+		        </div>
+	      	</div>
+	      	<div class="row">
+		        <div class="col-md-6">
+			      	<div class="form-group">
+			            <label for="recipient-name" class="col-form-label">Telefon</label>
+			            <input type="text" class="form-control" id="ytel">
+			        </div>
+				</div>
+				<div class="col-md-6 ml-auto">
+		            <label for="recipient-name" class="col-form-label">Adres</label>
+		            <input type="text" class="form-control" id="yadres">
+		        </div>
+	      	</div>
+	      	<div class="row">
+		        <div class="col-md-6">
+			      	<div class="form-group">
+			            <label for="recipient-name" class="col-form-label">tc</label>
+			            <input type="text" class="form-control" id="ytc">
+			        </div>
+				</div>
+				
+		    </div>
+		     </form>
+	      	</div>
+	          
+	       
+	      </div>
+		</div><!-- Tab Content div -->
+		<div class="modal-footer">
+        	<button type="button" class="btn btn-secondary" data-dismiss="modal">KAPAT</button>
+        	<button id="editbtn" type="button" class="btn btn-primary">Düzenle</button>
+      	</div>
+    </div>
+  </div>
+</div>
+
+
+<div class="modal fade" id="exampleModal1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Ekle</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+    <ul class="nav nav-tabs" id="myTab" role="tablist">
+  		<li class="nav-item">
+    		<a class="nav-link active" id="home-tab" data-toggle="tab" href="#home1" role="tab" aria-controls="home" aria-selected="true">Donor</a>
+  		</li>
+	  <li class="nav-item">
+	    <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile1" role="tab" aria-controls="profile" aria-selected="false">Yakını</a>
+	  </li>
+	</ul>
+
+	<div class="tab-content" id="myTabContent">
+  		<div class="tab-pane fade show active" id="home1" role="tabpanel" aria-labelledby="home-tab">
+	  		<div class="modal-body">
+	        <form id='createform'>
+	       	
+	        <div class="row">
+		        <div class="col-md-6">
+			      	<div class="form-group">
+			            {{ form.isim.label(class="col-form-label") }}
+		    			{{ form.isim(class="form-control") }}
+		    			<span class="hata-isim"></span>
+			        </div>
+				</div>
+				<div class="col-md-6 ml-auto">
+		            {{ form.soyisim.label(class="col-form-label") }}
+		    		{{ form.soyisim(class="form-control") }}
+		    		<span class="hata-soyisim"></span>
+
+		        </div>
+	      	</div>
+	      	 <div class="row">
+		        <div class="col-md-6">
+			      	<div class="form-group">
+			            {{ form.tel.label(class="col-form-label") }}
+		    			{{ form.tel(class="form-control") }}
+		    			<span class="hata-tel"></span>
+			        </div>
+				</div>
+				<div class="col-md-6 ml-auto">
+		           {{ form.adres.label(class="col-form-label") }}
+		    		{{ form.adres(class="form-control") }}
+		    		<span class="hata-adres"></span>
+		        </div>
+	      	</div>
+	      	<div class="row">
+		        <div class="col-md-6">
+			      	<div class="form-group">
+			            {{ form.tc.label(class="col-form-label") }}
+		   				 {{ form.tc(class="form-control") }}
+		   				 <span class="hata-tc"></span>
+			        </div>
+				</div>
+				<div class="col-md-6 ml-auto">
+		           <div class="form-group">
+		            <label for="recipient-name" class="col-form-label">Kan Grubu</label>
+		            <br>
+		            <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">Aç</button>
+		            </div>
+		        </div>
+	      	</div>
+	      	<div class="row">
+		        <div class="col-md-6">
+			      	<div class="form-group">
+			            {{ form.hastane.label(class="col-form-label") }}
+		    			{{ form.hastane(class="form-control") }}
+		    			<span class="hata-hastane"></span>
+			        </div>
+				</div>
+				<div class="col-md-6 ml-auto">
+		            {{ form.email.label(class="col-form-label") }}
+		    		{{ form.email(class="form-control") }}
+		    		<span class="hata-email"></span>
+		        </div>
+	      	</div>
+	      	 <div class="form-group">
+
+	      	 	 {{ form.cinsiyet.label(class="col-form-label") }}
+		    	 {{ form.cinsiyet }}
+		    	 <span class="hata-cinsiyet"></span>
+		    ---
+				<!-- <input id='erkek' type="radio" name="gender" value="e"/> erkek
+				<input id='kadin' type="radio" name="gender" value="k"/> kadin -->
+	         </div>
+	          <div class="form-group">
+	            <div class="collapse" id="collapseExample">
+		  				
+		  				  {{ form.kan.label(class="col-form-label") }}
+		    				{{ form.kan (class="form-control") }}
+		    				<span class="hata-kan"></span>
+		  				<!--kantipleri=['','A+','A-','B+','B-','AB+','AB-','0+','0-'] 
+		    				<input id="kan" type="radio" name="kan" value="1"> A+
+							<input id="kan" type="radio" name="kan" value="2"> A-
+							<input id="kan" type="radio" name="kan" value="3"> B+
+							<input id="kan" type="radio" name="kan" value="4"> B-
+							<input id="kan" type="radio" name="kan" value="5"> AB+
+							<input id="kan" type="radio" name="kan" value="6"> AB-
+							<input id="kan" type="radio" name="kan" value="7"> 0+
+							<input id="kan" type="radio" name="kan" value="8"> 0-
+							-->
+
+		  			
+					</div>
+	          </div>
+	          {{ form.hidden_tag() }}
+	          
+	            <!--<input id="createbtn"  type="submit" class="btn btn-primary" value="Kaydetjs"/>-->
+	        </form>
+	      </div>
+		</div>
+
+	  	<div class="tab-pane fade" id="profile1" role="tabpanel" aria-labelledby="profile-tab">
+			<label for="recipient-name" class="col-form-label">DONOR YAKINI</label>
+			<div class="modal-body">
+	        <form id='yakinform'>
+	        <div class="row">
+		        <div class="col-md-6">
+			      	<div class="form-group">
+			      		{{ form.yisim.label(class="col-form-label") }}
+		    			{{ form.yisim(class="form-control") }}
+			            <!--<label for="recipient-name" class="col-form-label">isim</label>
+			            <input type="text" class="form-control" id="yisim">-->
+			        </div>
+				</div>
+				<div class="col-md-6 ml-auto">
+						{{ form.ysoyisim.label(class="col-form-label") }}
+		    			{{ form.ysoyisim(class="form-control") }}
+		            <!--<label for="recipient-name" class="col-form-label">Soyisim</label>
+		            <input type="text" class="form-control" id="ysoyisim">-->
+		        </div>
+	      	</div>
+	      	<div class="row">
+		        <div class="col-md-6">
+			      	<div class="form-group">
+			      		{{ form.ytel.label(class="col-form-label") }}
+		    			{{ form.ytel(class="form-control") }}
+			            <!-- <label for="recipient-name" class="col-form-label">Telefon</label>
+			            <input type="text" class="form-control" id="ytel">-->
+			        </div>
+				</div>
+				<div class="col-md-6 ml-auto">
+						{{ form.yadres.label(class="col-form-label") }}
+		    			{{ form.yadres(class="form-control") }}
+		            <!-- <label for="recipient-name" class="col-form-label">Adres</label>
+		            <input type="text" class="form-control" id="yadres">-->
+		        </div>
+	      	</div>
+	      	<div class="row">
+		        <div class="col-md-6">
+			      	<div class="form-group">
+			      		{{ form.ytc.label(class="col-form-label") }}
+		    			{{ form.ytc(class="form-control") }}
+			            <!-- <label for="recipient-name" class="col-form-label">tc</label>
+			            <input type="text" class="form-control" id="ytc">-->
+			        </div>
+				</div>
+				
+		    </div>
+		     </form>
+	      	</div>
+	          
+	       
+	      </div>
+		</div><!-- Tab Content div -->
+		<div class="modal-footer">
+        	<button type="button" class="btn btn-secondary" data-dismiss="modal">KAPAT</button>
+        	<input id="createbtn"  type="submit" class="btn btn-primary" value="Kaydet"/>
+      	</div>
+		</div><!-- modal-content-->
+		
+	</div>
+</div>
+
+<script>
+    $(document).ready(function() {
+        $('#createbtn').click(function (e) {
+            var url = "/donor/json?a=create"; // send the form data here.
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: $('#createform, #yakinform').serialize(), // serializes the form's elements.
+                success: function (data) {
+                   //console.log(data)  // display the returned data in the console.
+                },
+                error: function (jqXHR, exception) {
+                	console.log('error kismi');
+                	console.log(jqXHR.responseText);
+
+			        var msg = '';
+			        if (jqXHR.status === 0) {
+			            msg = 'Not connect.\n Verify Network.';
+			        } else if (jqXHR.status == 404) {
+			            msg = 'Requested page not found. [404]';
+			        } else if (jqXHR.status == 500) {
+			            msg= '500 Server Error';
+			            //var hata1=JSON.stringify(jqXHR.responseText)
+			            const hata=JSON.parse(jqXHR.responseText);
+			          	key1=Object.keys(hata);
+			          	$('span').html('');
+			          	$('input').css('border-color','#ddd');
+			            for (var i = 0; i < key1.length; i++) {
+			            	$("input#"+key1[i]).css("border-color", "red");
+			            	$("span.hata-"+key1[i]).html(hata[key1[i]]);
+			            }
+			            //key1=Object.keys(hata)
+			            //console.log(key1);
+			            //for(i in key1){$("input#"+key1[i]).css("border-color", "red");}
+			            
+			        } else if (exception === 'parsererror') {
+			            msg = 'Requested JSON parse failed.';
+			        } else if (exception === 'timeout') {
+			            msg = 'Time out error.';
+			        } else if (exception === 'abort') {
+			            msg = 'Ajax request aborted.';
+			        } else {
+			            msg = 'Uncaught Error.\n' + jqXHR.responseText;
+			        }
+			        //$('#post').html(msg);
+			        console.log('enson'+msg);
+			    },
+            });
+            e.preventDefault(); // block the traditional submission of the form.
+        });
+        // Inject our CSRF token into our AJAX request.
+        $.ajaxSetup({
+            beforeSend: function(xhr, settings) {
+                if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
+                    xhr.setRequestHeader("X-CSRFToken", "{{ form.csrf_token._value() }}")
+                }
+            }
+        })
+    });
+</script>
+
+
+<script>
+
+
+	function formtemizle() {
+		$('span').html('');
+		$('input').css('border-color','#ddd');
+	  $("#isim").val("");
+      $("#soyisim").val("");
+      $("#tel").val("");
+      $("#adres").val("");
+      $("#tc").val("");
+      $("#kan").val("");
+      $("#hastane").val("");
+      $("#email").val("");
+      $("#kan").val("");
+      $("#yisim").val("");
+      $("#ysoyisim").val("");
+      $("#ytel").val("");
+      $("#yadres").val("");
+      $("#ytc").val("");
+		// body...
+	}
+	function form2temizle() {
+		$('span').html('');
+		$('input').css('border-color','#ddd');
+      $("#yisim").val("");
+      $("#ysoyisim").val("");
+      $("#ytel").val("");
+      $("#yadres").val("");
+      $("#ytc").val("");
+		// body...
+	}
+
+
+
+	$( "#silButton" ).click(function() {
+  	var j = JSON.stringify($table.bootstrapTable('getSelections'));
+  	data1={};
+  	data1['d_tc']=JSON.parse(j)[0]['d_tc'];
+  	if(j=='[]'){
+  		alert('lüften secim yapınız.')
+  	}
+  	else{
+  		$.ajax({
+    type: "post",
+    url: "/donor/json?a=delete",
+    data: JSON.stringify(data1),//JSON.parse(j)[0]
+    contentType: "json",
+    success: function(responseData, textStatus, jqXHR) {
+    	//alert('create')
+       console.log(responseData);
+      
+       $('#silmodal').modal('hide');
+       var $table = $('#table');
+       //var j = JSON.stringify($table.bootstrapTable('getSelections'));
+       $table.bootstrapTable('refresh');
+
+       
+    },
+    error: function(jqXHR, textStatus, errorThrown) {
+        console.log(errorThrown);
+    }})
+  	}
+  	
+	});
+
+
+	    /*Create Button*/
+
+        
+
+	/*
+	$( "#createbtn" ).click(function() {
+  	var data={}
+	$('#createform input').each(function(index) {
+   		data[$(this).attr('id')]=$(this).val();
+	})
+	$('#yakinform input').each(function(index) {
+   		data[$(this).attr('id')]=$(this).val();
+   	})
+
+	data['kan']=$("input[name='kan']:checked").val()
+	data['cinsiyet']=$("input[name='gender']:checked").val()
+	var j=JSON.stringify(data);
+	$.ajax({
+	    type: "post",
+	    url: "/donor/json?a=create",
+	    data: j,
+	    contentType: "json",
+	    success: function(responseData, textStatus, jqXHR) {
+	    	//alert('create')
+	       console.log(responseData);
+	       formtemizle();
+	       $('#exampleModal1').modal('hide');
+	       var $table = $('#table');
+	       $table.bootstrapTable('refresh');
+
+	       
+	    },
+	    error: function(jqXHR, textStatus, errorThrown) {
+	        console.log(errorThrown);
+    }})
+  	
+});
+*/
+  $( "#editbtn" ).click(function() {
+  	//var postData = JSON.stringify($table.bootstrapTable('getSelections'));
+  	var data={}
+	$('#editform input').each(function(index) {
+   		data[$(this).attr('id')]=$(this).val();
+	})
+	$('#yakinformd input').each(function(index) {
+   		data[$(this).attr('id')]=$(this).val();
+   	})
+	data['kan']=$("input[name='kan']:checked").val()
+	data['cinsiyet']=$("input[name='gender']:checked").val()
+	var j=JSON.stringify(data);
+	$.ajax({
+    type: "post",
+    url: "/donor/json?a=update",
+    data: j,
+    contentType: "json",
+    success: function(responseData, textStatus, jqXHR) {
+       console.log(responseData);
+       var $table = $('#table')
+       $table.bootstrapTable('refresh');
+       $('#exampleModal').modal('hide')
+    },
+    error: function(jqXHR, textStatus, errorThrown) {
+        console.log(errorThrown);
+    }})
+  	
+});
+  var $table = $('#table')
+  var $button = $('#buttonedit')
+  var $buttonekle= $('#ekle')
+
+  $(function() {
+  	$buttonekle.click(function() {
+  	 formtemizle()
+  	})
+
+
+
+
+    $button.click(function () {
+      json675=JSON.parse(JSON.stringify($table.bootstrapTable('getSelections')));
+      var json=json675;
+      //<!--select d_name,d_surname,d_gender,d_address,d_email,h_id,kan_grubu,d_tc,d_phone from donor' -->
+    
+     // $('#exampleModal').bind('show',function(){
+      $("#isim").val(json[0]["d_name"]);
+      $("#soyisim").val(json[0]["d_surname"]);
+      $("#tel").val(json[0]["d_phone"]);
+      $("#adres").val(json[0]["d_address"]);
+      $("#tc").val(json[0]["d_tc"]);
+      $("#kan").val(json[0]["kan"]);
+      $("#hastane").val(json[0]["h_id"]);
+      $("#email").val(json[0]["d_email"]);
+      //$("#kan").val(json[0]["kan_grubu"]);
+      $("#editform input[name='kan'][value="+json[0]["kan_grubu"]+"]").click()
+      $("input[name='gender'][value="+json[0]["d_gender"]+"]").click()
+
+
+      /*SECİLEN HASTANIN YAKINI BİLGİSİNİ GÖSTER*/
+
+      $.ajax({
+		    type: "get",
+		    url: "/donoryakini/json?tc="+json[0]["d_tc"],
+		    contentType: "json",
+		    success: function(responseData, textStatus, jqXHR) {
+		       	console.log(responseData);
+		       	if (responseData=='[]'){
+		       		form2temizle()
+		       	}else{
+		       		//insert into dfriend(d_f_name, d_f_surname,d_f_tc,d_f_phone,d_f_address
+		       		hjson= JSON.parse(responseData);
+		       		$("#yisim").val(hjson[0]["d_f_name"]);
+      				$("#ysoyisim").val(hjson[0]["d_f_surname"]);
+		      		$("#ytel").val(hjson[0]["d_f_phone"]);
+		      		$("#yadres").val(hjson[0]["d_f_address"]);
+		      		$("#ytc").val(hjson[0]["d_f_tc"]);
+		       	}
+		       
+		    },
+		    error: function(jqXHR, textStatus, errorThrown) {
+		        console.log(errorThrown);
+	  }})
+      
+
+  //});
+    })
+  })
+
+ 
+
+
+
+</script>
+
+{% endblock content %}

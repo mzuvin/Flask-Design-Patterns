@@ -9,6 +9,6 @@ Jinja2==2.11.3
 MarkupSafe==1.1.1
 requests==2.21.0
 urllib3==1.26.5
-Werkzeug==0.15.3
+Werkzeug==2.2.3
 Flask-WTF==0.14.2
 psycopg2==2.7.6.1
